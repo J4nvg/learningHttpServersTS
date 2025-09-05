@@ -1,8 +1,14 @@
 import { Request, Response } from "express";
-import { config } from "../config.js";
+import { config, envOrThrow, PermissionError } from "../config.js";
+import { deleteUsers } from "../db/queries/users.js";
 
-export function handlerResetHits(req:Request, res:Response){
+
+export async function handlerResetHits(req:Request, res:Response){
+    if(envOrThrow("PLATFORM") !== "dev"){
+           throw new PermissionError("Forbidden")
+    }
     try{
+    await deleteUsers();
     config.fileserverHits = 0;
     res.type("text").send("OK");
     }catch{
