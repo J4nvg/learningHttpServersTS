@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { BadRequest, config, PermissionError } from "../config.js";
+import { BadRequest, config, PermissionError, Unauthorized } from "../config.js";
 import { respondWithError } from "./json.js";
 
 
@@ -40,11 +40,15 @@ export function errorMiddleWare(err: Error, req: Request, res: Response, next: N
   console.log(err.message);
 
   if (err instanceof BadRequest) {
-    statusCode = 400;
+    statusCode = err.code;
     message = err.message;
   }
   else if (err instanceof PermissionError) {
-    statusCode = 403;
+    statusCode = err.code;
+    message = `${statusCode} ${err.message}`;
+  }
+  else if (err instanceof Unauthorized) {
+    statusCode = err.code;
     message = `${statusCode} ${err.message}`;
   }
 

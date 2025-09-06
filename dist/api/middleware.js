@@ -1,4 +1,4 @@
-import { BadRequest, config, PermissionError } from "../config.js";
+import { BadRequest, config, PermissionError, Unauthorized } from "../config.js";
 import { respondWithError } from "./json.js";
 export function middlewareLogResponse(req, res, next) {
     res.on("finish", () => {
@@ -26,11 +26,15 @@ export function errorMiddleWare(err, req, res, next) {
     let message = "Internal Server Error";
     console.log(err.message);
     if (err instanceof BadRequest) {
-        statusCode = 400;
+        statusCode = err.code;
         message = err.message;
     }
     else if (err instanceof PermissionError) {
-        statusCode = 403;
+        statusCode = err.code;
+        message = `${statusCode} ${err.message}`;
+    }
+    else if (err instanceof Unauthorized) {
+        statusCode = err.code;
         message = `${statusCode} ${err.message}`;
     }
     respondWithError(res, statusCode, message);

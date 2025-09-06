@@ -6,6 +6,9 @@ export function envOrThrow(key) {
     }
     return value;
 }
+const auth = {
+    saltRounds: 10,
+};
 const migrationConfig = {
     migrationsFolder: "./src/db/o/",
 };
@@ -16,6 +19,7 @@ const db = {
 export let config = {
     fileserverHits: 0,
     db: db,
+    auth: auth,
 };
 export class NotFoundError extends Error {
     code;
@@ -36,5 +40,12 @@ export class BadRequest extends Error {
     constructor(message) {
         super(message);
         this.code = 400;
+    }
+}
+export class Unauthorized extends Error {
+    code;
+    constructor(message) {
+        super(message);
+        this.code = 401;
     }
 }

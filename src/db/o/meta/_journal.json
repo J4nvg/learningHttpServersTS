@@ -15,6 +15,13 @@
       "when": 1757073792004,
       "tag": "0001_condemned_tomas",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1757141608212,
+      "tag": "0002_smooth_bedlam",
+      "breakpoints": true
     }
   ]
 }

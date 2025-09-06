@@ -14,12 +14,20 @@ export function envOrThrow(key: string): string {
 
 export type APIConfig = {
   fileserverHits: number;
-  db: db;
+  db: Db;
+  auth: Auth;
 };
 
+type Auth = {
+  saltRounds: number;
+}
+
+const auth: Auth ={
+  saltRounds: 10,
+}
 
 
-type db = {
+type Db = {
   migrationConfig:MigrationConfig;
   url: string;
 }
@@ -35,6 +43,7 @@ const db = {
 export let config: APIConfig= {
   fileserverHits: 0,
   db:db,
+  auth: auth,
 }
 
 
@@ -58,6 +67,13 @@ export class BadRequest extends Error {
   constructor(message:string){
     super(message);
     this.code = 400;
+  }
+}
+export class Unauthorized extends Error {
+  code: number;
+  constructor(message:string){
+    super(message);
+    this.code = 401;
   }
 }
 
