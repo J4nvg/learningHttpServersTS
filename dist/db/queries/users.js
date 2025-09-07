@@ -16,6 +16,34 @@ export async function getUser(email) {
         .where(eq(users.email, email));
     return result;
 }
+export async function getUserById(id) {
+    const [result] = await db
+        .select()
+        .from(users)
+        .where(eq(users.id, id));
+    return result;
+}
 export async function deleteUsers() {
     await db.execute(sql `TRUNCATE TABLE users RESTART IDENTITY CASCADE`);
+}
+export async function updateUserCredentials(email, hashedPassword, id) {
+    const [result] = await db
+        .update(users)
+        .set({
+        hashedPassword: hashedPassword,
+        email: email,
+    })
+        .where(eq(users.id, id))
+        .returning();
+    return result;
+}
+export async function upgradeUser(id) {
+    const [result] = await db
+        .update(users)
+        .set({
+        isChirpyRed: true
+    })
+        .where(eq(users.id, id))
+        .returning();
+    return result;
 }

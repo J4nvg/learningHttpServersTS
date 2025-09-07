@@ -1,4 +1,5 @@
 import 'dotenv/config';
+// Api keys
 export function envOrThrow(key) {
     const value = process.env[key];
     if (value === undefined) {
@@ -8,6 +9,10 @@ export function envOrThrow(key) {
 }
 const auth = {
     saltRounds: 10,
+    jwt_secret: envOrThrow("JWT_SECRET"),
+    jwt_std_expire: 3600,
+    refreshToken_expire_days: 60,
+    polka_key: envOrThrow("POKA_KEY"),
 };
 const migrationConfig = {
     migrationsFolder: "./src/db/o/",
@@ -21,6 +26,7 @@ export let config = {
     db: db,
     auth: auth,
 };
+// Errors
 export class NotFoundError extends Error {
     code;
     constructor(message) {

@@ -1,4 +1,4 @@
-import { BadRequest, config, PermissionError, Unauthorized } from "../config.js";
+import { BadRequest, config, NotFoundError, PermissionError, Unauthorized } from "../config.js";
 import { respondWithError } from "./json.js";
 export function middlewareLogResponse(req, res, next) {
     res.on("finish", () => {
@@ -34,6 +34,10 @@ export function errorMiddleWare(err, req, res, next) {
         message = `${statusCode} ${err.message}`;
     }
     else if (err instanceof Unauthorized) {
+        statusCode = err.code;
+        message = `${statusCode} ${err.message}`;
+    }
+    else if (err instanceof NotFoundError) {
         statusCode = err.code;
         message = `${statusCode} ${err.message}`;
     }

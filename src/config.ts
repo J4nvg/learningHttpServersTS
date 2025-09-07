@@ -2,7 +2,7 @@ import 'dotenv/config';
 import type { MigrationConfig } from "drizzle-orm/migrator";
 
 
-
+// Api keys
 export function envOrThrow(key: string): string {
   const value = process.env[key];
   if (value === undefined) {
@@ -11,7 +11,7 @@ export function envOrThrow(key: string): string {
   return value;
 }
 
-
+//  Server config
 export type APIConfig = {
   fileserverHits: number;
   db: Db;
@@ -20,10 +20,19 @@ export type APIConfig = {
 
 type Auth = {
   saltRounds: number;
+  jwt_secret: string;
+  jwt_std_expire: number;
+  refreshToken_expire_days: number;
+  polka_key: string;
+  
 }
 
 const auth: Auth ={
   saltRounds: 10,
+  jwt_secret: envOrThrow("JWT_SECRET"),
+  jwt_std_expire: 3600,
+refreshToken_expire_days: 60,
+  polka_key: envOrThrow("POKA_KEY"),
 }
 
 
@@ -46,6 +55,8 @@ export let config: APIConfig= {
   auth: auth,
 }
 
+
+// Errors
 
 export class NotFoundError extends Error {
   code: number;
